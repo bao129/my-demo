@@ -1,0 +1,132 @@
+*{
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 748px;
+    height: 508px;
+    overflow: hidden;
+}
+
+body,
+p,
+ul {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+body {
+    position: relative;
+    font-size: 14px;
+    font-family: 'Microsoft Yahei', arial, sans-serif;
+    background: #f3f5f7;
+    color: #7D8285;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    outline: none;
+    text-decoration: none;
+}
+
+header {
+    width: 100%;
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+    background: #0da8ff;
+    color: #fff;
+}
+
+header>a {
+    color: #ff6;
+}
+
+.clear::after {
+    display: block;
+    content: "";
+    width: 0;
+    height: 0;
+    font-size: 0;
+    clear: both;
+}
+
+.w {
+    padding: 35px 0 0 50px;
+    width: 100%;
+}
+
+.school-search {
+    margin-bottom: 30px;
+}
+
+.school-search>label,
+.school-search>select,
+.school-search>input,
+.search-btn {
+    display: block;
+    float: left;
+    height: 30px;
+    line-height: 30px;
+}
+
+.school-search>select,
+.school-search>input {
+    border: 0;
+}
+
+.school-search>label,
+.school-search>select {
+    margin-right: 20px;
+}
+
+.school-search>select {
+    width: 100px;
+}
+
+.school-search>input {
+    margin-left: 5px;
+    padding: 0 10px;
+    width: 120px;
+}
+
+.search-btn {
+    width: 45px;
+    text-align: center;
+    color: #fff;
+    background: #8fa0b5;
+}
+
+.err-tip {
+    text-align: center;
+}
+
+.school-list {
+    height: 308px;
+    overflow: auto;
+}
+
+.school-list>li {
+    float: left;
+    padding-right: 4px;
+    width: 224px;
+    height: 28px;
+    line-height: 28px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.school-list>li:hover {
+    cursor: pointer;
+    color: #0da8ff;
+}
+
+.err-tip {
+    display: none;
+}

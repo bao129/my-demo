@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <style>
+        .slides-wrap {
+            margin: 50px auto;
+            position: relative;
+            width: 600px;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .slider-list {
+            position: absolute;
+            top: 0;
+            left: -600px;
+            width: 6000px;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .slider-item {
+            float: left;
+            width: 600px;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .slides-icons {
+            position: absolute;
+            bottom: 10px;
+            left: calc(50% - 75px);
+            height: 20px;
+            overflow: hidden;
+        }
+
+        .slides-icon {
+            float: left;
+            margin-left: 10px;
+            width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            background: #008080;
+            cursor: pointer;
+        }
+
+        .slides-icon:hover {
+            background: #F86D6D;
+        }
+
+        .slidesOn {
+            background: #F86D6D;
+        }
+
+        .slides-btn {
+            position: absolute;
+            top: calc(50% - 30px);
+            width: 40px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            background: #6A6A6A;
+            color: #fff;
+            font-size: 22px;
+        }
+
+        .slides-btn-prev {
+            left: 0;
+        }
+
+        .slides-btn-next {
+            right: 0;
+        }
+    </style>
+    <script src="./js/vue.js"></script>
+</head>
+
+<body>
+    <div id="slides" class="slides-wrap" @mouseover="auto($event)" @mouseout="auto">
+        <ul class="slider-list" :style="{left:slidesLeft+'px'}">
+            <li class="slider-item">
+                <img class="slider-img" :src="sliders[sliders.length - 1].img" />
+            </li>
+            <li class="slider-item" v-for="item in sliders" :key="item.num">
+                <img class="slider-img" :src="item.img" />
+            </li>
+            <li class="slider-item">
+                <img class="slider-img" :src="sliders[0].img" />
+            </li>
+        </ul>
+        <ul class="slides-icons">
+            <li class="slides-icon" v-for="(item, index) in sliders" :class="{slidesOn: index===now}" :key="item.num"
+                @click="now=item.num"></li>
+        </ul>
+        <a class="slides-btn slides-btn-prev" href="###" @click.pervent="prev(slidersLen, now)">&lt;</a>
+        <a class="slides-btn slides-btn-next" href="###" @click.pervent="next(slidersLen, now)">&gt;</a>
+    </div>
+
+    <script>
+        let slides = new Vue({
+            el: '#slides',
+            data: {
+                manualTimer: null,
+                autoTimer: null,
+                now: 0,
+                slidesLeft: -600,
+                slider_w: 600,
+                sliders: [{
+                        num: 0,
+                        img: './img/vue轮播图/img (1).jpg'
+                    },
+                    {
+                        num: 1,
+                        img: './img/vue轮播图/img (2).jpg'
+                    },
+                    {
+                        num: 2,
+                        img: './img/vue轮播图/img (3).jpg'
+                    },
+                    {
+                        num: 3,
+                        img: './img/vue轮播图/img (4).jpg'
+                    },
+                    {
+                        num: 4,
+                        img: './img/vue轮播图/img (5).jpg'
+                    }
+                ]
+            },
+            computed: {
+                slidersLen() {
+                    return this.sliders.length
+                }
+            },
+            methods: {
+                next(slidersLen, now) {
+                    if (now < slidersLen - 1) {
+                        this.now++;
+                    } else {
+                        this.now = 0;
+                        this.slidesLeft = 0;
+                    }
+                },
+                prev(slidersLen, now) {
+                    if (now !== 0) {
+                        this.now--;
+                    } else {
+                        this.now = slidersLen - 1;
+                        this.slidesLeft = (slidersLen + 1) * -this.slider_w;
+                    }
+                },
+                iconClick(num) {
+                    this.now = num;
+                },
+                auto(event) {
+                    if(event && event.type === 'mouseover') {
+                        clearInterval(this.autoTimer);
+                        this.autoTimer = null;
+                        return;
+                    }
+                    this.autoTimer = setInterval(() => {
+                        this.next(this.slidersLen, this.now);
+                    }, 3000);
+                }
+            },
+            created() {
+                this.auto();
+            },
+            watch: {
+                now(newNow) {
+                    this.manualTimer && clearInterval(this.manualTimer);
+                    let destination = -this.slider_w * newNow - this.slider_w;
+                    this.manualTimer = setInterval(() => {
+                        if (this.slidesLeft === destination) {
+                            clearInterval(this.manualTimer);
+                            this.manualTimer = null;
+                            return;
+                        }
+                        let speed = (destination - this.slidesLeft) / 8;
+                        speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+                        this.slidesLeft = this.slidesLeft + speed;
+                    }, 30);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

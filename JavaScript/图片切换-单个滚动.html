@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<link rel="stylesheet" href="css/reset.css" />
+		<style>
+			.slides-wrap {
+				position: relative;
+				width: 980px;
+				height: 210px;
+				overflow: hidden;
+			}
+			
+			.slider-list {
+				position: absolute;
+				top: 0;
+				left: -980px;
+				width: 9800px;
+				height: 210px;
+				overflow: hidden;
+			}
+			
+			.slider-item {
+				float: left;
+				width: 980px;
+				height: 210px;
+				overflow: hidden;
+			}
+			
+			.slides-icons {
+				position: absolute;
+				bottom: 10px;
+				left: calc(50% - 75px);
+				height: 20px;
+				overflow: hidden;
+			}
+			
+			.slides-icon {
+				float: left;
+				margin-left: 10px;
+				width: 20px;
+				height: 20px;
+				border-radius: 10px;
+				background: #008080;
+				cursor: pointer;
+			}
+			
+			.slides-icon:hover {
+				background: #F86D6D;
+			}
+			
+			.slidesOn {
+				background: #F86D6D;
+			}
+			
+			.slides-btn {
+				position: absolute;
+				top: calc(50% - 30px);
+				width: 40px;
+				height: 60px;
+				line-height: 60px;
+				text-align: center;
+				background: #6A6A6A;
+				color: #fff;
+				font-size: 22px;
+			}
+			
+			.slides-btn-prev {
+				left: 0;
+			}
+			
+			.slides-btn-next {
+				right: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="slides-wrap">
+			<ul class="slider-list">
+				<li class="slider-item">
+					<a class="slider-lk"><img class="slider-img" src="images/图片轮换-单个滚动/1.jpg" /></a>
+				</li>
+				<li class="slider-item">
+					<a class="slider-lk"><img class="slider-img" src="images/图片轮换-单个滚动/2.jpg" /></a>
+				</li>
+				<li class="slider-item">
+					<a class="slider-lk"><img class="slider-img" src="images/图片轮换-单个滚动/3.jpg" /></a>
+				</li>
+				<li class="slider-item">
+					<a class="slider-lk"><img class="slider-img" src="images/图片轮换-单个滚动/4.jpg" /></a>
+				</li>
+				<li class="slider-item">
+					<a class="slider-lk"><img class="slider-img" src="images/图片轮换-单个滚动/5.jpg" /></a>
+				</li>
+			</ul>
+			<ul class="slides-icons">
+				<li class="slides-icon slidesOn"></li>
+				<li class="slides-icon"></li>
+				<li class="slides-icon"></li>
+				<li class="slides-icon"></li>
+				<li class="slides-icon"></li>
+			</ul>
+			<a class="slides-btn slides-btn-prev" href="###">&lt;</a>
+			<a class="slides-btn slides-btn-next" href="###">&gt;</a>
+		</div>
+
+		<script>
+			//获取轮播图视窗
+			var slidesWrap = document.getElementsByClassName("slides-wrap")[0];
+			//获取轮播图图片列表
+			var sliderList = document.getElementsByClassName("slider-list")[0];
+			//获取轮播图图片项
+			var slider = sliderList.getElementsByClassName("slider-item");
+			//获取轮播图列表长度
+			var sliderLen = slider.length;
+			//获取小圆点项
+			var slidesIcon = document.getElementsByClassName("slides-icon");
+			//初始化轮播图图片项的长度
+			var slider_w = 980;
+			//初始化定时器
+			var timer = null;
+			var now = 0;
+			
+            //添加首尾衔接项的函数
+            function addConnectElement() {
+                var sliderItem;
+                sliderItem = slider[0].cloneNode(true);
+                sliderList.appendChild(sliderItem);
+                sliderItem = slider[slider.length - 2].cloneNode(true);
+                sliderList.insertBefore(sliderItem, slider[0]);
+            }
+            addConnectElement();
+
+			//鼠标在轮播图视窗点击时的操作
+			slidesWrap.addEventListener("mouseover", function(event) {
+				//取得点击的元素和元素的class
+				var elm = event.target;
+				var elmClass = elm.className;
+				//判断是否是a元素或者li元素，不是则推出
+				if(elm.nodeName !== "A" && elm.nodeName !== "LI") return;
+				//执行点击判断函数
+                event.preventDefault();
+				judge(elm, elmClass);
+			}, false);
+			
+			//鼠标移入轮播图视窗取消动画
+			slidesWrap.addEventListener("mouseover", function() {
+				clearInterval(timer);
+			}, false);
+			
+			//鼠标移出轮播图视窗继续动画
+			slidesWrap.addEventListener("mouseout", function() {
+				timer = setInterval(auto, 3000);
+			}, false);
+			
+			//自动执行函数
+			function auto() {
+				next();
+			}
+			//设置自动执行
+			timer = setInterval(auto, 3000);
+			
+			//滚动执行函数，接受参数为需要滚动到的目标位置
+			function scroll(target) {
+				act(sliderList, "left", target);
+				tab();
+			}
+
+			//图片滚动动画函数
+			function act(elm, att, target) {
+				//计时器存在则清除计时器
+				elm.timer && clearInterval(elm.timer);
+				//设置计时器
+				elm.timer = setInterval(function () {
+					//定时器进行的条件
+					var stop = true;
+					//获取当前的位置
+					var cur = parseInt(getComputedStyle(elm, null)[att]);
+					//滚动的位置减去当前位置除以8获得要滚动的距离
+					var speed = (target - cur) / 8;
+					//滚动的距离取整
+					speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+					//如果当前位置不等于目标位置则取消定时器条件并进行滚动
+					if(cur !== target) {
+						stop = false;
+						elm.style[att] = cur + speed + 'px';
+					}
+					//如果条件存在停止并释放内存
+					if(stop) {
+						clearInterval(elm.timer);
+					}
+				}, 30);
+			}
+
+			//高亮表示当前图片的小圆点
+			function tab() {
+				//还原所有小圆点
+				for(var i = 0; i < slidesIcon.length; i++) {
+					slidesIcon[i].className = 'slides-icon';
+				}
+				//为当前图片的小圆点添加高亮属性
+				slidesIcon[now].className = slidesIcon[now].className + ' slidesOn';
+			}
+
+			//点击滚动到下一张图片
+			function next() {
+				if(now < sliderLen - 1) {
+					now++;
+				} else {
+					now = 0;
+					sliderList.style.left = 0 + 'px';
+				}
+				scroll(-slider_w * now - slider_w);
+			}
+
+			//点击滚动到上一张图片
+			function prev() {
+				if(now !== 0) {
+					now--;
+				} else {
+					now = sliderLen - 1;
+					sliderList.style.left = (sliderLen + 1) * -slider_w + 'px';
+				}
+				scroll(-slider_w * now - slider_w);
+			}
+
+			//点击判断函数
+			function judge(elm, elmClass) {
+				//点击的是否是a元素
+				if(elm.nodeName === "A") {
+					//是否是next按钮或者prev按钮，并执行相应操作
+					if(elmClass.indexOf("slides-btn-prev") !== -1) {
+						prev();
+					}
+					if(elmClass.indexOf("slides-btn-next") !== -1) {
+						next();
+					}
+				}
+				//点击的是否li元素并且是icon按钮并且没有被高亮
+				if(elm.nodeName === "LI" &&
+				elmClass.indexOf("slides-icon") !== -1 &&
+				elmClass.indexOf("slidesOn") === -1) {
+					//执行小圆点执行函数
+					iconClick(elm);
+				}
+			}
+
+			//小圆点点击时执行函数
+			function iconClick(elm) {
+				//判断被点击的是第几个小圆点把数值赋给now
+				for(var i = 0; i < slidesIcon.length; i++) {
+					if(elm === slidesIcon[i]) {
+						now = i;
+					}
+					//删除所有小圆点的高亮属性
+					slidesIcon[i].className = 'slides-icon';
+				}
+				//为当前数值的小圆点添加高亮属性
+				slidesIcon[now].className = slidesIcon[now].className + " slidesOn";
+				//执行动画滚动函数
+				scroll(-slider_w * now - slider_w);
+			}
+		</script>
+	</body>
+
+</html>

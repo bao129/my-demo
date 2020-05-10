@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link href="./css/reset.css" rel="stylesheet" />
+    <style>
+        .mod {
+            width: 883px;
+            margin: 30px auto;
+            position: relative;
+        }
+
+        .mod-release {
+            padding-bottom: 5px;
+        }
+
+        .mod-release .mui-slider .control-left em,
+        .mod-release .mui-slider .control-right em {
+            filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
+            opacity: 0.3;
+        }
+
+        .mod-release .release {
+            margin-top: -10px;
+        }
+
+        .mod-release .release ul {
+            padding-top: 10px;
+        }
+
+        .mod-release .mui-slider-controller {
+            display: block;
+            float: right;
+            margin-top: 4px;
+        }
+
+        .mod-release .mui-slider-scroll-wrap {
+            padding-right: 10px;
+            margin-right: -10px;
+            position: relative;
+            overflow: hidden;
+            width: 100%
+        }
+
+        .mod-release .mui-slider-scroll-container {
+            position: relative;
+            width: 5000px;
+            left: 0;
+        }
+
+        .mod-release ul {
+            float: left;
+            height: 184px;
+            width: 900px;
+            overflow: hidden
+        }
+
+        .mod-release li {
+            float: left;
+            margin-right: 20px;
+            padding-bottom: 10px;
+            width: 130px
+        }
+
+        .mod-release li .pic {
+            position: relative;
+            margin-bottom: 5px;
+        }
+
+        .mod-release li img {
+            display: block;
+            width: 130px;
+            height: 130px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2)
+        }
+
+        .mod-release li .artist a {
+            color: #999999
+        }
+
+        .mod-release li .artist a:visited {
+            color: #999999
+        }
+
+        .mod-release li .artist a:focus {
+            color: #999999
+        }
+
+        .mod-release li .artist a:hover {
+            color: #999999
+        }
+
+        .mod-release li .artist a:active {
+            color: #999999
+        }
+
+        .mod-release li .music {
+            font-size: 14px
+        }
+
+        .mod-release li .play {
+            position: absolute;
+            right: 5px;
+            bottom: 5px
+        }
+
+        .mui-slider .control-left,
+        .mui-slider .control-right {
+            position: absolute;
+            z-index: 1;
+            top: 50%;
+            margin-top: -70px;
+            width: 30px;
+            height: 100px;
+            cursor: pointer
+        }
+
+        .mui-slider .control-left i,
+        .mui-slider .control-right i {
+            position: absolute;
+            z-index: 2;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -6px;
+            width: 13px;
+            height: 21px;
+            filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
+            opacity: 0.6;
+            background: url("../images/jE3izRb2.png") no-repeat
+        }
+
+        .mui-slider .control-left em,
+        .mui-slider .control-right em {
+            border-radius: 5px;
+            position: absolute;
+            width: 100%;
+            height: 100px;
+            top: 0;
+            left: 0;
+            background: black;
+            filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
+            opacity: 0.3;
+        }
+
+        .mui-slider .control-left:hover i,
+        .mui-slider .control-right:hover i {
+            filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+            opacity: 1;
+        }
+
+        .mui-slider .control-left {
+            left: -15px;
+        }
+
+        .mui-slider .control-right {
+            right: -15px;
+        }
+
+        .mui-slider .control-right i {
+            background: url("../images/Jqm9O4XG.png") no-repeat;
+        }
+
+        .mui-slider-controller {
+            overflow: hidden;
+        }
+
+        .mui-slider-controller:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .mui-slider-controller .slider-page {
+            position: relative;
+            display: block;
+            float: left;
+            line-height: 6px;
+        }
+
+        .mui-slider-controller .slider-page:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .mui-slider-controller .slider-page-inner {
+            display: block;
+            float: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mui-slider-controller .slider-page-inner .bg {
+            border-radius: 4px;
+            position: absolute;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 16px;
+            background: #333333;
+            filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+            opacity: 0.5;
+        }
+
+        .mui-slider-controller a {
+            display: block;
+            float: left;
+        }
+
+        .mui-slider-controller .page {
+            position: relative;
+            z-index: 2;
+            padding: 5px 3px;
+        }
+
+        .mui-slider-controller .page i {
+            transition: width 0.5s ease-out;
+            display: block;
+            float: left;
+            width: 6px;
+            height: 6px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 5px;
+            background: #cccccc;
+        }
+
+        .mui-slider-controller .page.on i {
+            width: 15px;
+            background: #327ccb;
+        }
+
+        .mui-slider-controller .slider-right {
+            left: 100%;
+        }
+
+        .mui-slider-controller .slider-right .slider-page-inner {
+            right: 100%;
+        }
+
+        .mui-slider-controller .slider-center {
+            left: 50%;
+        }
+
+        .mui-slider-controller .slider-center .slider-page-inner {
+            right: 50%;
+        }
+
+        .mui-slider-controller .slider-left {
+            left: 0;
+        }
+
+        .mui-slider-controller .slider-left .slider-page-inner {
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div monkey="NI_new_album" class="mod mod-release">
+        <div class="hd clearfix">
+            <div class="mui-slider-controller">
+                <div class="slider-page slider-right">
+                    <div id="bar" class="slider-page-inner">
+                        <a class="page on" href=""><i> </i> </a>
+                        <a class="page " href=""><i> </i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bd">
+            <div id="box" class="release mui-slider">
+                <a href="#" id="prev" class="control-left"><i> </i> <em> </em> </a>
+                <a href="#" id="next" class="control-right"><i> </i> <em> </em> </a>
+                <div class="mui-slider-scroll-wrap">
+                    <div id="container" class="mui-slider-scroll-container">
+                        <ul class="clearfix">
+                            <li>
+                                <div class="pic">
+                                    <a target="_blank" href="#">
+                                        <img alt="images/1.jpg" src="images/图片轮换-整篇滚动/1.jpg">
+                                    </a>
+                                    <span><a class="play icon-play-white js-play-album" href="#"></a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pic">
+                                    <a target="_blank" href="#">
+                                        <img alt="" src="images/图片轮换-整篇滚动/2.jpg">
+                                    </a>
+                                    <span><a class="play icon-play-white js-play-album" href="#"></a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pic">
+                                    <span class="icon icon-cover-special icon-top-right"></span>
+                                    <a target="_blank" href="#">
+                                        <img alt="" src="images/图片轮换-整篇滚动/3.jpg">
+                                    </a>
+                                    <span><a class="play icon-play-white js-play-album" href="#"></a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pic">
+                                    <a target="_blank" href="#">
+                                        <img alt="" src="images/图片轮换-整篇滚动/4.jpg">
+                                    </a>
+                                    <span><a class="play icon-play-white js-play-album" href="#"></a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pic">
+                                    <a target="_blank" href="#">
+                                        <img alt="" src="images/图片轮换-整篇滚动/5.jpg">
+                                    </a>
+                                    <span><a class="play icon-play-white js-play-album" href="#"></a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pic">
+                                    <span class="icon icon-cover-special icon-top-right"></span>
+                                    <a target="_blank" href="#">
+                                        <img alt="" src="images/图片轮换-整篇滚动/6.jpg">
+                                    </a>
+                                    <span><a class="play icon-play-white js-play-album" href="#"></a></span>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li>
+                                <div class="pic">
+                                    <a target="_blank" href="#">
+                                        <img alt="images/1.jpg" src="images/图片轮换-整篇滚动/21.jpg">
+                                    </a>
+                                    <span><a class="play icon-play-white js-play-album" href="#"></a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pic">
+                                    <a target="_blank" href="#">
+                                        <img alt="" src="images/图片轮换-整篇滚动/22.jpg">
+                                    </a>
+                                    <span><a class="play icon-play-white js-play-album" href="#"></a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pic">
+                                    <span class="icon icon-cover-special icon-top-right"></span>
+                                    <a target="_blank" href="#">
+                                        <img alt="" src="images/图片轮换-整篇滚动/23.jpg">
+                                    </a>
+                                    <span><a class="play icon-play-white js-play-album" href="#"></a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pic">
+                                    <a target="_blank" href="#">
+                                        <img alt="" src="images/图片轮换-整篇滚动/24.jpg">
+                                    </a>
+                                    <span><a class="play icon-play-white js-play-album" href="#"></a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pic">
+                                    <a target="_blank" href="#">
+                                        <img alt="" src="images/图片轮换-整篇滚动/25.jpg">
+                                    </a>
+                                    <span><a class="play icon-play-white js-play-album" href="#"></a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pic">
+                                    <span class="icon icon-cover-special icon-top-right"></span>
+                                    <a target="_blank" href="#">
+                                        <img alt="" src="images/图片轮换-整篇滚动/26.jpg">
+                                    </a>
+                                    <span><a class="play icon-play-white js-play-album" href="#"></a></span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        (function () {
+            var box = document.getElementById('box');
+            var bar = document.getElementById('bar');
+            var dot = bar.getElementsByTagName('a');
+            var prev = document.getElementById('prev');
+            var next = document.getElementById('next');
+            var container = document.getElementById('container');
+            container.innerHTML += container.innerHTML;
+            var ul = container.getElementsByTagName('ul');
+            var li = ul[0].getElementsByTagName('li');
+            var ul_w = ul[0].offsetWidth;
+            var len = li.length * 2;
+            var page = 4;
+            var half = (page / 2);
+            var now = 0;
+            var timer = null;
+
+            function auto() {
+                next.onclick();
+            }
+            timer = setInterval(auto, 3000);
+            prev.onclick = function () {
+                if (now > 0) {
+                    now--;
+                } else {
+                    now = half - 1;
+                    container.style.left = -(ul_w * half) + 'px';
+                }
+                scroll();
+            }
+            next.onclick = function () {
+                if (now < page - 1) {
+                    now++;
+                } else {
+                    now = half;
+                    container.style.left = -(ul_w * (half - 1)) + 'px';
+                }
+                scroll();
+            }
+
+            function scroll() {
+                tab();
+                act(container, 'left', -ul_w * now);
+            }
+            box.onmouseover = function () {
+                clearInterval(timer);
+            }
+            box.onmouseout = function () {
+                timer = setInterval(auto, 3000);
+            }
+
+            function tab() {
+                for (var i = 0; i < 2; i++) {
+                    dot[i].className = 'page';
+                }
+                dot[now % 2].className = 'page on';
+            }
+
+            function css(obj, attr) {
+                if (obj.currentStyle) {
+                    return obj.currentStyle[attr];
+                } else {
+                    return getComputedStyle(obj, false)[attr];
+                }
+            }
+
+            function act(obj, attr, target, fn) {
+                obj.timer && clearInterval(obj.timer);
+                obj.timer = setInterval(function () {
+                    var stop = true;
+                    var cur = parseInt(css(obj, attr));
+                    var speed = (target - cur) / 8;
+                    speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+                    if (target != cur) {
+                        stop = false;
+                        obj.style[attr] = speed + cur + 'px';
+                    }
+                    if (stop) {
+                        clearInterval(obj.timer);
+                        obj.timer = null;
+                        fn && fn();
+                    }
+                }, 30);
+            }
+        }());
+    </script>
+</body>
+
+</html>

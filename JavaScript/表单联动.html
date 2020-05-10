@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<style>
+			* {
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			form {
+				width: 80%;
+				margin: 0px auto;
+				text-align: center;
+				border: 1px solid #000;
+			}
+			
+			.profession {
+				margin: 20px 20px;
+			}
+			
+			#non-student {
+				margin-left: 35%;
+			}
+			
+			#students_option,
+			#non-students_option {
+				padding: 10px 20px;
+			}
+			
+			#students_option select {
+				margin: 0px 30px;
+			}
+			
+			#non-students_option input {
+				margin: 0px 20px;
+				width: 40%;
+			}
+			
+			.university {
+				width: 134px;
+			}
+			
+			.hidden {
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<form method="get" action="" id="formLinkage">
+			<div id="profession_wrap">
+				<input type="radio" class="profession" name="profession" value="在校生" id="student" checked="" /> <label for="student">在校生</label>
+				<input type="radio" class="profession" name="profession" value="非在校生" id="non-student" /> <label for="non-student">非在校生</label>
+			</div>
+
+			<div id="students_option">
+				<p>
+					<label for="city">学校</label>
+
+					<select id="city">
+						<option value="北京" id="city_beijing">北京</option>
+						<option value="武汉" id="city_wuhan">武汉</option>
+						<option value="海南" id="city_hainan">海南</option>
+					</select>
+
+					<select class="university" id="university_beijing">
+						<option value="北京大学">北京大学</option>
+						<option value="清华大学">清华大学</option>
+						<option value="北京电影学院">北京电影学院</option>
+					</select>
+
+					<select class="hidden university" id="university_wuhan">
+						<option value="武汉大学">武汉大学</option>
+						<option value="武汉理工大学">武汉理工大学</option>
+						<option value="华中科技大学">华中科技大学</option>
+					</select>
+
+					<select class="hidden university" id="university_hainan">
+						<option value="海南大学">海南大学</option>
+						<option value="海南师范大学">海南师范大学</option>
+						<option value="海南经济职业学院">海南经济职业学院</option>
+					</select>
+				</p>
+			</div>
+
+			<div id="non-students_option" class="hidden">
+				<p>
+					<label for="profession">就业单位：</label>
+					<input type="text" id="profession" />
+				</p>
+			</div>
+		</form>
+
+		<script>
+
+			// 在校生和非在校生选项卡切换；
+			(function radioSwitch() {
+				var radio = document.getElementsByClassName('profession');
+				cityToUniversity();
+				for(var i = 0; i < radio.length; i++) {
+					radio[i].onchange = function() {
+						// 给radio绑定change事件；
+						if(this.checked && this.value == "在校生") {
+							//判断radio的选择值；
+							document.getElementById('students_option').classList.remove("hidden");
+							document.getElementById('non-students_option').classList.add("hidden");
+							cityToUniversity();
+						} else {
+							document.getElementById('students_option').classList.add("hidden");
+							document.getElementById('non-students_option').classList.remove("hidden");
+						}
+					}
+				}
+			}());
+
+			// 定义一个函数使点击city显示相应的大学；
+			function cityToUniversity() {
+				var uni = ["university_beijing",
+					"university_wuhan",
+					"university_hainan"
+				]; //大学id名；
+				var select = document.getElementById('city');
+				var university = document.getElementsByClassName('university');
+				// 	定义select选择事件；
+				select.onchange = function() {
+					for(var i = 0; i < university.length; i++) {
+						university[i].classList.add("hidden");
+					}
+					document.getElementById(uni[select.selectedIndex]).classList.remove("hidden");
+				};
+			}
+		</script>
+	</body>
+
+</html>

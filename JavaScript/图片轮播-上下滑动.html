@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <style>
+        .news-wrap {
+            position: relative;
+            width: 1200px;
+            height: 360px;
+            overflow: hidden;
+        }
+
+        .news-wrap * {
+            box-sizing: border-box;
+        }
+
+        .news-img-list,
+        .news-content {
+            float: left;
+        }
+
+        .news-img-list {
+            position: relative;
+            top: -360px;
+            left: 0;
+            width: 580px;
+            height: 2520px;
+            overflow: hidden;
+        }
+
+        .news-img-item {
+            width: 580px;
+            height: 360px;
+            overflow: hidden;
+        }
+
+        .news-content {
+            width: 460px;
+            height: 100%;
+        }
+
+        .news-item {
+            position: relative;
+            padding: 15px 0 15px 50px;
+            width: 100%;
+            height: 90px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .news-item::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 152px;
+            width: 1px;
+            height: 100%;
+            background-color: seagreen;
+        }
+
+        .newsdate,
+        .newsinfo {
+            height: 60px;
+        }
+
+        .newsdate {
+            float: left;
+            padding: 5px 0;
+        }
+
+        .newsinfo {
+            position: relative;
+            float: right;
+            padding: 10px 0 10px 50px;
+            width: 308px;
+            line-height: 20px;
+        }
+
+        .newsinfo::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 5px;
+            left: -2px;
+            width: 5px;
+            height: 50px;
+            background-color: #F86D6D;
+        }
+
+        .newsdate-day {
+            font-size: 20px;
+        }
+
+        .news-item.slidesOn h4,
+        .news-item.slidesOn p {
+            color: #F86D6D;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slides-wrap news-wrap">
+        <ul class="slider-list news-img-list">
+            <li class="slider-item news-img-item" style="background-color: red; font-size: 30px">1</li>
+            <li class="slider-item news-img-item" style="background-color: blue; font-size: 30px">2</li>
+            <li class="slider-item news-img-item" style="background-color: burlywood; font-size: 30px">3</li>
+            <li class="slider-item news-img-item" style="background-color: aqua; font-size: 30px">4</li>
+            <li class="slider-item news-img-item" style="background-color: teal; font-size: 30px">5</li>
+        </ul>
+        <ul class="slides-icons news-content">
+            <li class="slides-icon slidesOn news-item clear">
+                <div class="newsdate">
+                    <p class="newsdate-day">29日</p>
+                    <p class="newsdate-yam">2019年4月</p>
+                </div>
+                <a href="###" class="newsinfo">
+                    <h4 class="newsinfo-tit">活动预告 | 创客·优计划夏令营等你来</h4>
+                    <p class="newsinfo-descr">想参赛的童鞋注意了，比赛形式略有调整哦</p>
+                </a>
+            </li>
+            <li class="slides-icon slidesOn news-item clear">
+                <div class="newsdate">
+                    <p class="newsdate-day">29日</p>
+                    <p class="newsdate-yam">2019年4月</p>
+                </div>
+                <a href="###" class="newsinfo">
+                    <h4 class="newsinfo-tit">活动预告 | 创客·优计划夏令营等你来</h4>
+                    <p class="newsinfo-descr">想参赛的童鞋注意了，比赛形式略有调整哦</p>
+                </a>
+            </li>
+            <li class="slides-icon slidesOn news-item clear">
+                <div class="newsdate">
+                    <p class="newsdate-day">29日</p>
+                    <p class="newsdate-yam">2019年4月</p>
+                </div>
+                <a href="###" class="newsinfo">
+                    <h4 class="newsinfo-tit">活动预告 | 创客·优计划夏令营等你来</h4>
+                    <p class="newsinfo-descr">想参赛的童鞋注意了，比赛形式略有调整哦</p>
+                </a>
+            </li>
+            <li class="slides-icon slidesOn news-item clear">
+                <div class="newsdate">
+                    <p class="newsdate-day">29日</p>
+                    <p class="newsdate-yam">2019年4月</p>
+                </div>
+                <a href="###" class="newsinfo">
+                    <h4 class="newsinfo-tit">活动预告 | 创客·优计划夏令营等你来</h4>
+                    <p class="newsinfo-descr">想参赛的童鞋注意了，比赛形式略有调整哦</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        //获取轮播图视窗
+        var slidesWrap = document.getElementsByClassName("slides-wrap")[0];
+        //获取轮播图图片列表
+        var sliderList = slidesWrap.getElementsByClassName("slider-list")[0];
+        //获取轮播图图片项
+        var slider = sliderList.getElementsByClassName("slider-item");
+        //获取轮播图列表长度
+        var sliderLen = slider.length;
+        //获取小圆点项
+        var slidersIcons = slidesWrap.getElementsByClassName('slides-icons')[0];
+        var slidesIcon = slidersIcons.getElementsByClassName("slides-icon");
+        //初始化轮播图图片项的长度
+        var slider_h = 360;
+        //初始化定时器
+        var timer = null;
+        var now = 0;
+
+        //添加首尾衔接项的函数
+        function addConnectElement() {
+            var sliderItem;
+            sliderItem = slider[0].cloneNode(true);
+            sliderList.appendChild(sliderItem);
+            sliderItem = slider[slider.length - 2].cloneNode(true);
+            sliderList.insertBefore(sliderItem, slider[0]);
+        }
+        addConnectElement();
+
+        //鼠标在轮播图视窗点击时的操作
+        slidersIcons.addEventListener("mouseover", function (event) {
+            var elm = null;
+            for (elm = event.target; elm !== event.currentTarget; elm = elm.parentElement) {
+                if (elm.className.indexOf('slides-icon') !== -1) {
+                    //执行小圆移动执行函数
+                    iconMove(elm);
+                }
+            }
+            //执行点击判断函数
+
+        }, true);
+
+        //鼠标移入轮播图视窗取消动画
+        slidesWrap.addEventListener("mouseover", function () {
+            clearInterval(timer);
+        }, false);
+
+        //鼠标移出轮播图视窗继续动画
+        slidesWrap.addEventListener("mouseout", function () {
+            timer = setInterval(auto, 2500);
+        }, false);
+
+        //自动执行函数
+        function auto() {
+            next();
+        }
+        //设置自动执行
+        timer = setInterval(auto, 2500);
+
+        //滚动执行函数，接受参数为需要滚动到的目标位置
+        function scroll(target) {
+            act(sliderList, "top", target);
+            tab();
+        }
+
+        //图片滚动动画函数
+        function act(elm, att, target) {
+            //计时器存在则清除计时器
+            elm.timer && clearInterval(elm.timer);
+            //设置计时器
+            elm.timer = setInterval(function () {
+                //定时器进行的条件
+                var stop = true;
+                //获取当前的位置
+                var cur = parseInt(getComputedStyle(elm, null)[att]);
+                //滚动的位置减去当前位置除以8获得要滚动的距离
+                var speed = (target - cur) / 8;
+                //滚动的距离取整
+                speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+                //如果当前位置不等于目标位置则取消定时器条件并进行滚动
+                if (cur !== target) {
+                    stop = false;
+                    elm.style[att] = cur + speed + 'px';
+                }
+                //如果条件存在停止并释放内存
+                if (stop) {
+                    clearInterval(elm.timer);
+                }
+            }, 15);
+        }
+
+        //高亮表示当前图片的小圆点
+        function tab() {
+            //还原所有小圆点
+            for (var i = 0; i < slidesIcon.length; i++) {
+                slidesIcon[i].className = slidesIcon[i].className.replace(' slidesOn', '');
+            }
+            //为当前图片的小圆点添加高亮属性
+            slidesIcon[now].className = slidesIcon[now].className + ' slidesOn';
+        }
+
+        //点击滚动到下一张图片
+        function next() {
+            if (now < sliderLen - 1) {
+                now++;
+            } else {
+                now = 0;
+                sliderList.style.top = 0 + 'px';
+            }
+            scroll(-slider_h * now - slider_h);
+        }
+
+        //点击滚动到上一张图片
+        function prev() {
+            if (now !== 0) {
+                now--;
+            } else {
+                now = sliderLen - 1;
+                sliderList.style.top = (sliderLen + 1) * -slider_h + 'px';
+            }
+            scroll(-slider_h * now - slider_h);
+        }
+
+        //小圆点点击时执行函数
+        function iconMove(elm) {
+            //判断被点击的是第几个小圆点把数值赋给now
+            for (var i = 0; i < slidesIcon.length; i++) {
+                if (elm === slidesIcon[i]) {
+                    now = i;
+                }
+                //删除所有小圆点的高亮属性
+                slidesIcon[i].className = slidesIcon[i].className.replace(' slidesOn', '');
+            }
+            //为当前数值的小圆点添加高亮属性
+            slidesIcon[now].className = slidesIcon[now].className + " slidesOn";
+            //执行动画滚动函数
+            scroll(-slider_h * now - slider_h);
+        }
+    </script>
+</body>
+
+</html>

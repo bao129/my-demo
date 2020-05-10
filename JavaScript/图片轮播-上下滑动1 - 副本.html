@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <style>
+        .news-wrap {
+            position: relative;
+            width: 1200px;
+            height: 360px;
+            overflow: hidden;
+        }
+
+        .news-wrap * {
+            box-sizing: border-box;
+        }
+
+        .news-img-list,
+        .news-content {
+            float: left;
+        }
+
+        .news-img-list {
+            position: relative;
+            top: -360px;
+            left: 0;
+            width: 580px;
+            height: 2520px;
+            overflow: hidden;
+        }
+
+        .news-img-item {
+            width: 580px;
+            height: 360px;
+            overflow: hidden;
+        }
+
+        .news-content {
+            width: 460px;
+            height: 100%;
+            font-size: 12px;
+        }
+
+        .news-item {
+            position: relative;
+            padding: 15px 0 15px 50px;
+            width: 100%;
+            height: 90px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .news-item::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 138px;
+            width: 1px;
+            height: 100%;
+            background-color: #ccc;
+        }
+
+        .newsdate,
+        .newsinfo {
+            height: 60px;
+            line-height: 20px;
+        }
+
+        .newsdate {
+            float: left;
+            padding: 10px 0;
+            text-align: right;
+        }
+
+        .newsinfo {
+            position: relative;
+            float: right;
+            padding: 10px 0 10px 32px;
+            width: 320px;
+        }
+
+        .newsinfo::before {
+            content: "";
+            display: none;
+            position: absolute;
+            top: 5px;
+            left: -4px;
+            width: 5px;
+            height: 50px;
+            background-color: #F86D6D;
+        }
+
+        .newsdate-day {
+            font-size: 16px;
+        }
+
+        .news-item .newsinfo h4,
+        .news-item .newsinfo p {
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .news-item .newsinfo h4 {
+            font-size: 14px;
+        }
+
+        .news-item.slidesOn .newsinfo h4,
+        .news-item.slidesOn .newsinfo p {
+            color: #F86D6D;
+        }
+
+        .news-item.slidesOn .newsinfo::before {
+            display: block;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="slides-wrap news-wrap">
+        <ul class="slider-list news-img-list">
+            <li class="slider-item news-img-item" style="background-color: red; font-size: 30px">1</li>
+            <li class="slider-item news-img-item" style="background-color: blue; font-size: 30px">2</li>
+            <li class="slider-item news-img-item" style="background-color: burlywood; font-size: 30px">3</li>
+            <li class="slider-item news-img-item" style="background-color: aqua; font-size: 30px">4</li>
+        </ul>
+        <ul class="slides-icons news-content">
+            <li class="slides-icon slidesOn news-item clear">
+                <div class="newsdate">
+                    <p class="newsdate-day">29日</p>
+                    <p class="newsdate-yam">2019年4月</p>
+                </div>
+                <a href="###" class="newsinfo">
+                    <h4 class="newsinfo-tit">活动预告 | 创客·优计划夏令营等你来</h4>
+                    <p class="newsinfo-descr">想参赛的童哈哈哈哈哈哈哈哈啊哈哈哈鞋注意了，比赛形式略有调整哦</p>
+                </a>
+            </li>
+            <li class="slides-icon news-item clear">
+                <div class="newsdate">
+                    <p class="newsdate-day">29日</p>
+                    <p class="newsdate-yam">2019年4月</p>
+                </div>
+                <a href="###" class="newsinfo">
+                    <h4 class="newsinfo-tit">活动预告 | 创客·优计划夏令营等你来</h4>
+                    <p class="newsinfo-descr">想参赛的童鞋注意了，比赛形式略有调整哦</p>
+                </a>
+            </li>
+            <li class="slides-icon news-item clear">
+                <div class="newsdate">
+                    <p class="newsdate-day">29日</p>
+                    <p class="newsdate-yam">2019年4月</p>
+                </div>
+                <a href="###" class="newsinfo">
+                    <h4 class="newsinfo-tit">活动预告 | 创客·优计划夏令营等你来</h4>
+                    <p class="newsinfo-descr">想参赛的童鞋注意了，比赛形式略有调整哦</p>
+                </a>
+            </li>
+            <li class="slides-icon news-item clear">
+                <div class="newsdate">
+                    <p class="newsdate-day">29日</p>
+                    <p class="newsdate-yam">2019年4月</p>
+                </div>
+                <a href="###" class="newsinfo">
+                    <h4 class="newsinfo-tit">活动预告 | 创客·优计划夏令营等你来</h4>
+                    <p class="newsinfo-descr">想参赛的童鞋注意了，比赛形式略有调整哦</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        var slidesWrap = document.getElementsByClassName("slides-wrap")[0];
+    var sliderList = slidesWrap.getElementsByClassName("slider-list")[0];
+    var slider = sliderList.getElementsByClassName("slider-item");
+    var sliderLen = slider.length;
+    var slidersIcons = slidesWrap.getElementsByClassName('slides-icons')[0];
+    var slidesIcon = slidersIcons.getElementsByClassName("slides-icon");
+    //初始化轮播图图片项的高度
+    var slider_h = 360;
+    var timer = null;
+    var now = 0;
+
+    //添加首尾衔接项的函数
+    function addConnectElement() {
+        var sliderItem;
+        sliderItem = slider[0].cloneNode(true);
+        sliderList.appendChild(sliderItem);
+        sliderItem = slider[slider.length - 2].cloneNode(true);
+        sliderList.insertBefore(sliderItem, slider[0]);
+    }
+    addConnectElement();
+
+    //鼠标在轮播图视窗点击时的操作
+    slidersIcons.addEventListener("mouseover", function (event) {
+        var elm = null;
+        for (elm = event.target; elm !== event.currentTarget; elm = elm.parentElement) {
+            if (elm.className.indexOf('slides-icon') !== -1) {
+                iconMove(elm);
+            }
+        }
+    }, false);
+
+    slidesWrap.addEventListener("mouseover", function () {
+        clearInterval(timer);
+    }, false);
+
+    slidesWrap.addEventListener("mouseout", function () {
+        timer = setInterval(auto, 2500);
+    }, false);
+
+    //自动执行函数
+    function auto() {
+        next();
+    }
+    //设置自动执行
+    timer = setInterval(auto, 2500);
+
+    //滚动执行函数，接受参数为需要滚动到的目标位置
+    function scroll(target) {
+        act(sliderList, "top", target);
+        tab();
+    }
+
+    //图片滚动动画函数
+    function act(elm, att, target) {
+        elm.timer && clearInterval(elm.timer);
+        elm.timer = setInterval(function () {
+            var stop = true;
+            var cur = parseInt(getComputedStyle(elm, null)[att]);
+            var speed = (target - cur) / 8;
+            speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+            if (cur !== target) {
+                stop = false;
+                elm.style[att] = cur + speed + 'px';
+            }
+            if (stop) {
+                clearInterval(elm.timer);
+            }
+        }, 15);
+    }
+
+    //高亮表示当前图片的小圆点
+    function tab() {
+        for (var i = 0; i < slidesIcon.length; i++) {
+            slidesIcon[i].className = slidesIcon[i].className.replace(' slidesOn', '');
+        }
+        slidesIcon[now].className = slidesIcon[now].className + ' slidesOn';
+    }
+
+    //点击滚动到下一张图片
+    function next() {
+        if (now < sliderLen - 1) {
+            now++;
+        } else {
+            now = 0;
+            sliderList.style.top = 0 + 'px';
+        }
+        scroll(-slider_h * now - slider_h);
+    }
+
+    //小圆点点击时执行函数
+    function iconMove(elm) {
+        for (var i = 0; i < slidesIcon.length; i++) {
+            if (elm === slidesIcon[i]) {
+                now = i;
+            }
+            slidesIcon[i].className = slidesIcon[i].className.replace(' slidesOn', '');
+        }
+        slidesIcon[now].className = slidesIcon[now].className + " slidesOn";
+        scroll(-slider_h * now - slider_h);
+    }
+    </script>
+</body>
+
+</html>

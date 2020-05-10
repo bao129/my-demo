@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <style>
+        h2 {
+                margin-bottom: 20px; 
+            }
+    
+            .field-box {
+                width: 500px;
+                margin: 50px auto;
+            }
+    
+            .field-input {
+                text-align: center;
+            }
+			.calendar-box {
+                display: none;
+                margin: 5px auto;
+				padding: 0 4px 12px;
+				width: 290px;
+				border: 1px solid #d2d2d2;
+				font-size: 16px;
+				text-align: center;
+				background: #fff;
+			}
+			
+			.calendar-hd {
+				position: relative;
+				height: 35px;
+				border-bottom: 1px solid #D2D2D2;
+			}
+			
+			.calendar-tit {
+				height: 100%;
+				line-height: 35px;
+			}
+			
+			.month-prev,
+			.month-next {
+				position: absolute;
+				top: 8px;
+				width: 20px;
+				font-weight: bold;
+			}
+			
+			.month-prev {
+				left: 14px;
+			}
+			
+			.month-next {
+				right: 14px;
+			}
+			
+			.day-table {
+				width: 224px;
+				border-collapse: collapse;
+			}
+			
+			.day-table th {
+				padding: 0 4px;
+				height: 32px;
+			}
+			
+			.day-table td {
+				padding: 0 4px;
+			}
+			
+			.calday {
+				display: inline-block;
+				width: 32px;
+				height: 32px;
+				line-height: 32px;
+				border-radius: 50%;
+			}
+			
+			.calday:hover {
+				background: #F86D6D;
+				color: #fff;
+			}
+			
+			.caldayOn {
+				display: inline-block;
+				width: 32px;
+				height: 32px;
+				line-height: 32px;
+				border-radius: 50%;
+				background: #F86D6D;
+				color: #fff;
+			}
+			
+			.day-table span {
+				display: inline-block;
+				width: 32px;
+				height: 32px;
+				line-height: 32px;
+				border-radius: 50%;
+				color: #999;
+			}
+			
+			input {
+				cursor: text;
+			}
+		</style>
+</head>
+
+<body>
+    <div class="field-box">
+        <h2 class="field-name">日历组件：点击开始时间或者结束时间来选择日期，在已选择日期的情况下，会在日历中高亮选择的日期，并会自动根据开始/结束时间来限制结束/开始时间的可选天数选项</h2>
+        <p class="field-input">
+            <input type="text" readonly="readonly" placeholder="开始时间" id="PTjob-term-start" autocomplete="off" />
+            <input type="text" readonly="readonly" placeholder="结束时间" id="PTjob-term-end" autocomplete="off" />
+        </p>
+        <div class="calendar-box js-calendar-box">
+            <div class="calendar-hd">
+                <p class="calendar-tit js-cal-tit"></p>
+                <a class="month-prev js-month-prev" href="###">&lt;</a>
+                <a class="month-next js-month-next" href="###">&gt;</a>
+            </div>
+            <table class="day-table js-cal-table">
+                <thead>
+                    <tr>
+                        <th>一</th>
+                        <th>二</th>
+                        <th>三</th>
+                        <th>四</th>
+                        <th>五</th>
+                        <th>六</th>
+                        <th>日</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            //获取日历窗口
+            var calBox = document.getElementsByClassName("js-calendar-box")[0];
+            //获取开始时间字段
+            var startInp = document.getElementById("PTjob-term-start");
+            //获取结束时间字段
+            var endInp = document.getElementById("PTjob-term-end");
+            //获取日历标题
+            var calTit = calBox.getElementsByClassName("js-cal-tit")[0];
+            //获取日历列表的表格项集合
+            var calTd = calBox.getElementsByTagName("td");
+            //获取下一个月按钮
+            var nextBtn = calBox.getElementsByClassName("js-month-next")[0];
+            //获取上一个月按钮
+            var prevBtn = calBox.getElementsByClassName("js-month-prev")[0];
+            //获取当前时间
+            var nowDate = new Date();
+            //获取当前时间的年份
+            var nowYear = nowDate.getFullYear();
+            //获取当前时间的月份
+            var nowMonth = nowDate.getMonth();
+            //获取当前时间的日数
+            var nowTaday = nowDate.getDate();
+            //设置变量用于保存点击状态，判断点击的是开始时间还是结束时间
+            var nowInp = null;
+            //日历更新时用于作比较的天数
+            var num = 1;
+
+            //初始化日历组件函数
+            function init() {
+                //点击浏览器窗口时，隐藏日历，取消点击状态
+                window.onclick = function () {
+                    calBox.style.display = "none";
+                    nowInp = null;
+                }
+                //点击日历窗口时触发，根据点击的元素执行相应的函数
+                calBox.addEventListener("click", function (event) {
+                    var tag = event.target;
+                    if (tag === nextBtn) {
+                        next();
+                    }
+                    if (tag === prevBtn) {
+                        prev();
+                    }
+                    if (tag.className.indexOf("calday") !== -1) {
+                        if (nowInp !== null && nowInp === "start") {
+                            startInp.value = tag.parentElement.getAttribute("theDate");
+                        } else if (nowInp !== null && nowInp === "end") {
+                            endInp.value = tag.parentElement.getAttribute("theDate");
+                        }
+                        calBox.style.display = "none";
+                    }
+                    //取消事件冒泡，防止和上级的元素的点击事件冲突
+                    event.stopPropagation();
+                }, false);
+                //点击开始时间字段时触发
+                startInp.addEventListener("click", function (event) {
+                    nowInp = "start"
+                    calBox.style.display = "block";
+                    if (startInp.value !== "") {
+                        initCalAdd(new Date(startInp.value));
+                    }
+                    startCalAdd(startInp.value, endInp.value);
+                    //取消事件冒泡，防止和上级的元素的点击事件冲突
+                    event.stopPropagation();
+                }, false);
+                //点击结束时间字段时触发
+                endInp.addEventListener("click", function (event) {
+                    nowInp = "end"
+                    calBox.style.display = "block";
+                    if (endInp.value !== "") {
+                        initCalAdd(new Date(endInp.value));
+                    }
+                    endCalAdd(endInp.value, startInp.value);
+                    //取消事件冒泡，防止和上级的元素的点击事件冲突
+                    event.stopPropagation();
+                }, false);
+
+                initCalAdd(nowDate);
+            }
+            init();
+
+            //点击下个月按钮时的操作函数
+            function next() {
+                var time = new Date(calTit.innerText.replace("年", "-").replace("月", "-") + "1");
+                var year = time.getFullYear();
+                var month = time.getMonth() + 1;
+                time = new Date(year, month);
+                initCalAdd(time);
+                if (nowInp === "start" && endInp.value !== "") {
+                    startCalAdd(startInp.value, endInp.value);
+                } else if (nowInp === "end" && startInp.value !== "") {
+                    endCalAdd(endInp.value, startInp.value);
+                }
+                if (prevBtn.style.display === "none") {
+                    prevBtn.style.display = "block";
+                }
+                return;
+            }
+
+            //点击上个月按钮时的操作函数
+            function prev() {
+                var time = new Date(calTit.innerText.replace("年", "-").replace("月", "-") + "1");
+                var year = time.getFullYear();
+                var month = time.getMonth() - 1;
+                time = new Date(year, month);
+                initCalAdd(time);
+                if (nowInp === "start" && endInp.value !== "") {
+                    startCalAdd(startInp.value, endInp.value);
+                } else if (nowInp === "end" && startInp.value !== "") {
+                    endCalAdd(endInp.value, startInp.value);
+                }
+                return;
+            }
+
+            //日历列表更新函数，参数为一个包含年月日的时间段
+            //根据时间段参数进行相应的更新
+            function initCalAdd(time) {
+                var newYear = time.getFullYear();
+                var newMonth = time.getMonth();
+                var newTaday = time.getDate();
+                var newDay = new Date(newYear, newMonth, 1).getDay();
+                //获取当前月份的最后一天，也就是该月份的天数
+                var dayNum = new Date(newYear, newMonth + 1, 0).getDate();
+                if (newDay !== 0) {
+                    newDay = newDay - 1;
+                } else {
+                    newDay = 6;
+                }
+                calTit.innerText = newYear + "年" + (newMonth + 1) + "月";
+                for (var i = 0; i < calTd.length; i++) {
+                    if (i < newDay || num > dayNum) {
+                        if (calTd[i].hasAttribute("theDate")) {
+                            calTd[i].removeAttribute("theDate")
+                        }
+                        calTd[i].innerHTML = "";
+                        continue;
+                    }
+                    calTd[i].setAttribute("theDate", newYear + "-" + (newMonth + 1) + "-" + num);
+                    if (newYear === nowYear && newMonth === nowMonth && num <= nowTaday) {
+                        if (num < nowTaday) {
+                            calTd[i].innerHTML = "<span>" + num + "</span>";
+                        }
+                        if (num === nowTaday) {
+                            calTd[i].innerHTML = "<a href='###' class='calday'>" + "今天" + "</a>";
+                        }
+                        num++;
+                        continue;
+                    }
+                    calTd[i].innerHTML = "<a href='###' class='calday'>" + num + "</a>";
+                    num++;
+                }
+                num = 1;
+                btnDisplay(newYear, newMonth, dayNum);
+                return;
+            }
+
+            //日历被初始化后，根据开始/结束时间对日历进行的进一步修改
+            function startCalAdd(startDate, endDate) {
+                caldayOn_Del();
+                if (startDate && startDate !== "") {
+                    startDate = new Date(startDate);
+                    for (var i = 0; i < calTd.length; i++) {
+                        if (Date.parse(startDate) === Date.parse(calTd[i].getAttribute("theDate"))) {
+                            calTd[i].firstElementChild.className = "caldayOn";
+                            break;
+                        }
+                    }
+                }
+                if (endDate && endDate !== "") {
+                    endDate = new Date(endDate);
+                    for (var j = 0; j < calTd.length; j++) {
+                        if (calTd[j].hasAttribute("theDate") && Date.parse(calTd[j].getAttribute("theDate")) > Date
+                            .parse(endDate)) {
+                            calTd[j].innerHTML = "<span>" + calTd[j].innerText + "</span>";
+                        }
+                    }
+                }
+            }
+
+            //日历被初始化后，根据结束/开始时间对日历进行的进一步修改
+            function endCalAdd(endDate, startDate) {
+                caldayOn_Del();
+                if (endDate && endDate !== "") {
+                    endDate = new Date(endDate);
+                    for (var i = 0; i < calTd.length; i++) {
+                        if (Date.parse(endDate) === Date.parse(calTd[i].getAttribute("theDate"))) {
+                            calTd[i].firstElementChild.className = "caldayOn";
+                            break;
+                        }
+                    }
+                }
+                if (startDate && startDate !== "") {
+                    startDate = new Date(startDate);
+                    for (var j = 0; j < calTd.length; j++) {
+                        if (calTd[j].hasAttribute("theDate") && Date.parse(calTd[j].getAttribute("theDate")) < Date
+                            .parse(startDate)) {
+                            calTd[j].innerHTML = "<span>" + calTd[j].innerText + "</span>";
+                        }
+                    }
+                }
+            }
+
+            //上个月按钮的显示隐藏操作函数
+            function btnDisplay(year, month, day) {
+                var newTime = new Date(year, month, day);
+                newTime = Date.parse(newTime);
+                if (year === nowYear && month === nowMonth) {
+                    prevBtn.style.display = "none";
+                }
+            }
+
+            //清除被选中天数高亮状态的操作函数
+            function caldayOn_Del() {
+                var caldayOn = calBox.getElementsByClassName("caldayOn")[0];
+                if (caldayOn) {
+                    caldayOn.className = caldayOn.className.replace("caldayOn", "");
+                }
+                return;
+            }
+
+        }());
+    </script>
+</body>
+
+</html>

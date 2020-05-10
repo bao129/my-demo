@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <style>
+        h2 {
+            margin-bottom: 20px; 
+        }
+
+        .field-box {
+            width: 500px;
+            margin: 50px auto;
+        }
+
+        .field-input {
+            text-align: center;
+        }
+
+        .calendar-box {
+            margin: 5px auto;
+			padding: 0 4px 12px;
+			width: 290px;
+			border: 1px solid #d2d2d2;
+			font-size: 16px;
+			text-align: center;
+            background: #fff;
+        }
+			
+		.calendar-hd {
+            position: relative;	
+            height: 35px;
+			border-bottom: 1px solid #D2D2D2;
+		}
+			
+		.calendar-tit {
+			height: 100%;
+			line-height: 35px;
+		}
+			
+		.month-prev,
+		.month-next {
+			position: absolute;
+			top: 8px;
+			width: 20px;
+			font-weight: bold;
+		}
+			
+		.month-prev {
+			left: 14px;
+		}
+			
+		.month-next {
+			right: 14px;
+		}
+			
+        .week-list,
+        .day-list {
+            width: 280px;
+            overflow: hidden;
+		}
+			
+        .day-list li,
+        .week {
+            float: left;
+        }
+
+        .day-list li {
+            padding: 0 1px;
+        }
+
+        .week {
+            padding: 0 4px;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+        }
+
+        .day-list p,
+        .day-list a {
+            width: 38px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 50%;
+        }
+
+        .day-list a:hover,
+        .caldayOn {
+            background: #F86D6D;
+			color: #fff;
+        }
+			
+		.day-list p {
+			color: #999;
+		}
+			
+		input {
+            cursor: text;
+        }
+    </style>
+    <script src="./js/vue.js"></script>
+</head>
+
+<body>
+    <div id="field" class="field-box">
+        <h2>日历组件：点击开始时间或者结束时间来选择日期，在已选择日期的情况下，会在日历中高亮选择的日期，并会自动根据开始/结束时间来限制结束/开始时间的可选天数选项</h2>
+        <p class="field-input">
+            <input type="text" readonly="readonly" placeholder="开始时间" @click.stop="startClick" :value="startValue" />
+            <input type="text" readonly="readonly" placeholder="结束时间" @click.stop="endClick" :value="endValue" />
+        </p>
+        <div class="calendar-box" v-show="calBoxDisplay" @click.stop="">
+            <div class="calendar-hd">
+                <p class="calendar-tit">{{calTit}}</p>
+                <a class="month-prev" href="javascript:void(0)" v-if="prevDisplay" @click.stop="prevClick">&lt;</a>
+                <a class="month-next" href="javascript:void(0)" @click.stop="nextClick">&gt;</a>
+            </div>
+            <div class="calendar-con">
+                <ul class="week-list">
+                    <li class="week">一</li>
+                    <li class="week">二</li>
+                    <li class="week">三</li>
+                    <li class="week">四</li>
+                    <li class="week">五</li>
+                    <li class="week">六</li>
+                    <li class="week">日</li>
+                </ul>
+                <ul class="day-list">
+                    <li v-for="day in dayList">
+                        <a v-if="day.dom && day.dom==='a'" href="javascript:void(0)" :class="caldayOn(day.value)"
+                            @click.stop="dayClick(day.value)">{{day.num}}</a>
+                        <p v-else-if="day.dom && day.dom==='p'">{{day.num}}</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let fieldBox = new Vue({
+            el: '#field',
+            data: {
+                calBoxDisplay: false,
+                prevDisplay: false,
+                nowDate: new Date(),
+                nowYear: new Date().getFullYear(),
+                nowMonth: new Date().getMonth(),
+                nowTaday: new Date().getDate(),
+                nowInp: '',
+                startValue: '',
+                endValue: '',
+                calTit: '',
+                num: 1,
+                dayList: []
+            },
+            computed: {
+
+            },
+            methods: {
+                initCalAdd(time) {
+                    this.dayList = [];
+                    let newTime = time !== '' ? new Date(time) : this.nowDate;
+                    let newYear = newTime.getFullYear();
+                    let newMonth = newTime.getMonth();
+                    let newTaday = newTime.getDate();
+                    let newWeek = new Date(newYear, newMonth, 1).getDay();
+                    if (newWeek !== 0) {
+                        newWeek = newWeek - 1;
+                    } else {
+                        newWeek = 6
+                    }
+                    let dayLen = new Date(newYear, newMonth + 1, 0).getDate() + newWeek;
+                    let num = 1;
+                    this.calTit = `${newYear}年${newMonth + 1}月`;
+                    for (let i = 0; i < dayLen; i++) {
+                        if (i < newWeek) {
+                            this.dayList.push({
+                                dom: 'p',
+                                num: '',
+                                value: ''
+                            });
+                            continue;
+                        }
+                        if (
+                            newYear === this.nowYear &&
+                            newMonth === this.nowMonth &&
+                            num <= this.nowTaday
+                        ) {
+                            if (num < this.nowTaday) {
+                                this.dayList.push({
+                                    dom: 'p',
+                                    num: num,
+                                    value: `${newYear}-${newMonth + 1}-${num}`
+                                });
+                            } else if (num === this.nowTaday) {
+                                this.dayList.push({
+                                    dom: 'a',
+                                    num: '今天',
+                                    value: `${newYear}-${newMonth + 1}-${num}`
+                                });
+                            }
+                            num++;
+                            continue;
+                        }
+                        this.dayList.push({
+                            dom: 'a',
+                            num: num,
+                            value: `${newYear}-${newMonth + 1}-${num}`
+                        });
+                        num++;
+                    }
+                },
+                dayClick(value) {
+                    if (this.nowInp === 'start') {
+                        this.startValue = value;
+                    } else {
+                        this.endValue = value;
+                    }
+                    this.
+                    calBoxDisplay = false;
+                },
+                nextClick() {
+                    let time = new Date(this.calTit.replace("年", "-").replace("月", "-") + "1");
+                    let year = time.getFullYear();
+                    let month = time.getMonth() + 1;
+                    time = new Date(year, month);
+                    this.initCalAdd(time);
+                    if (this.nowInp === 'start' && this.endValue !== '') {
+                        this.startCalRevise();
+                    } else if (this.nowInp === 'end' && this.startValue !== '') {
+                        this.endCalRevise();
+                    }
+                    if (this.prevDisplay === false) {
+                        this.prevDisplay = true;
+                    }
+                },
+                prevClick() {
+                    let time = new Date(this.calTit.replace("年", "-").replace("月", "-") + "1");
+                    let year = time.getFullYear();
+                    let month = time.getMonth() - 1;
+                    time = new Date(year, month);
+                    this.initCalAdd(time);
+                    if (this.nowInp === 'start' && this.endValue !== '') {
+                        this.startCalRevise();
+                    } else if (this.nowInp === 'end' && this.startValue !== '') {
+                        this.endCalRevise();
+                    }
+                    if (month === this.nowMonth) {
+                        this.prevDisplay = false;
+                    }
+                },
+                startClick() {
+                    this.nowInp = 'start';
+                    this.calBoxDisplay = true;
+                    if (this.startValue !== '') {
+                        this.initCalAdd(this.startValue);
+                    }
+                    if (this.endValue !== '') {
+                        this.startCalRevise();
+                    }
+                },
+                endClick() {
+                    this.nowInp = 'end';
+                    this.calBoxDisplay = true;
+                    if (this.endValue !== '') {
+                        this.initCalAdd(this.endValue);
+                    }
+                    if (this.startValue !== '') {
+                        this.endCalRevise();
+                    }
+                },
+                startCalRevise() {
+                    for (let i = 0; i < this.dayList.length; i++) {
+                        if (
+                            this.dayList[i].value !== '' &&
+                            Date.parse(this.dayList[i].value) >
+                            Date.parse(this.endValue)
+                        ) {
+                            this.dayList[i].dom = 'p'
+                        }
+                    }
+                },
+                endCalRevise() {
+                    for (let i = 0; i < this.dayList.length; i++) {
+                        if (
+                            this.dayList[i].value !== '' &&
+                            Date.parse(this.dayList[i].value) <
+                            Date.parse(this.startValue)
+                        ) {
+                            this.dayList[i].dom = 'p'
+                        }
+                    }
+                },
+                caldayOn(value) {
+                    if (
+                        (this.nowInp === 'start' &&
+                        value === this.startValue) ||
+                        (this.nowInp === 'end' && value === this.endValue)
+                    ) {
+                        return 'caldayOn';
+                    }
+                }
+            },
+            created() {
+                this.initCalAdd(this.nowDate);
+            }
+        });
+
+        window.onclick = function () {
+            fieldBox.calBoxDisplay = false;
+            fieldBox.nowInp = '';
+        }
+    </script>
+</body>
+
+</html>
